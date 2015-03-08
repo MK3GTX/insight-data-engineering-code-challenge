@@ -11,4 +11,4 @@ This projects has two primary functions
 2. Verify / create input files in './wc_input'
 3. Run the run.sh* bash script: 'sh run.sh'
 
-* run.sh can be modified to input and output to any directory.
+> *run.sh can be modified to input and output to any directory.
