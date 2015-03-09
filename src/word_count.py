@@ -45,8 +45,8 @@ def write_to_file(wc_output, words):
     w = open(wc_output, 'w')
 
     # get sorted list of items in word then traverse it
-    for k, v in sorted(words.items()):
-        w.write("{}\t{}\n".format(k, v))
+    for key, value in sorted(words.items()):
+        w.write("{}\t{}\n".format(key, value))
 
 
 def main():
