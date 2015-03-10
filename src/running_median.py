@@ -1,40 +1,21 @@
 # Imports
-import os
 import sys
+import utils
 from heapq import heappush, heappushpop
 
 
-def get_files(source):
-    # Initialize list of file paths
-    paths = []
-
-    # Traverse folder for files
-    for root, dirs, files in os.walk(source):
-        # Alphabetize list
-        files.sort()
-
-        # Add files that end with .txt to list
-        for file in files:
-            if file.endswith('.txt'):
-                paths.append(source + file)
-
-    return paths
-
-
-def read_file(file):
-    # initialize words array and open file
+# Reads file and returns wordcount
+def get_word_count(file):
     word_count = []
-    f = open(file, 'r')
-
-    # traverse file rather than reading it all into memory
-    for line in f:
-        word_count.append(line.count(" ") + 1)
+    with open(file) as f:
+        for line in f:
+            word_count.append(line.count(" ") + 1)
 
     return word_count
 
 
+# Computes the running median
 def running_median():
-    # Compute running median
     def gen():
         left, right = [], [(yield)]
         while True:
@@ -46,11 +27,10 @@ def running_median():
     return g
 
 
+# Write output to text file
 def write_to_file(wc_output, words):
-    # open file, write to file, close file
-    w = open(wc_output, 'w')
-    w.write("\n".join("{0:.1f}".format(word) for word in words))
-    w.close()
+    with open(wc_output, 'w') as w:
+        w.write("\n".join("{0:.1f}".format(word) for word in words))
 
 
 def main():
@@ -58,21 +38,15 @@ def main():
     if len(sys.argv) != 3:
         sys.exit("Invalid parameters.")
 
-    # set vars
-    # set input folder
     wc_input = sys.argv[1]
     if wc_input[len(wc_input) - 1] != "/":
         wc_input += "/"
-
-    # set output file
     wc_output = sys.argv[2]
 
-    # create objects
-    median = running_median()
     medians = []
-    # iterate through file list
-    for file in get_files(wc_input):
-        for count in read_file(file):
+    median = running_median()
+    for file in utils.get_text_files(wc_input):
+        for count in get_word_count(file):
             medians.append(median.send(count))
 
     # output to text file
